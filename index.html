@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
+    <title>Trivia Game</title>
+    <style>
+    body{
+    
+        background-color: aqua;
+    }
+
+    #main{
+        margin-top: 6rem;
+    }
+    #trivia{
+        padding-left: 15rem;
+        padding-right: 15rem;
+    }
+    </style>
+</head>
+<body>
+<div class="container" id="main">
+<div class="row">
+<div class="col-lg-12">   
+</div>
+</div>
+</div>
+    <div class="container">
+        <div class="row">
+                <div class="well jumbotron">
+<center> 
+                        
+        <h1>Solar System Trivia</h1>
+        <br/>
+        <br/>
+        <a href="#" id="start" class="btn btn-primary btn-lg">Start</a>
+        <br/>
+        
+          <h3 id="question"></h3>
+          <br/><br/>
+          <form id="form">
+        
+          </form>
+          <br/>
+          <a href="#" id="next" class="button">Next</a><br/>
+          <div id="progressbar" class="progress-bar progress-bar-striped"></div>
+        </div>
+        <div id="result"></div>
+</center>
+
+</div>
+</div>
+ </div>
+    <script>
+    
+        const allQuestions = [
+            {
+                question:"How many moons are in our Solar System?",
+                choices: ["503","263","181","370"]
+                correctAnswer: 2
+            },
+            {
+            question: "Which planet's moon has an active volcano?",
+            answers: ["Uranus", "Jupiter","Saturn","Mars"]
+            correctAnswer: 1
+            },
+            {
+                question:"Which planets moon contains the sea of traquility?",
+                choices: ["Earth","Mercury", "Venus", "Mars"]
+                correctAnswer: 0
+            },
+            {
+                question:"Which planet's techtonic plates are causing it to shrink?",
+                choices: ["Earth","Neptune","Uranus","Mercury"]
+                correctAnswer: 3
+            },
+            {
+                question:"Which planet orbits on its side?",
+                choices: ["Jupiter", "Mars", "Uranus","Venus"]
+                 correctAnswer: 2
+            }
+            ];
+
+ var currentquestion = 0;
+var correctAnswers = 0;
+
+function setupOptions() {
+  $('#question').html(parseInt(currentquestion) + 1 + ". " + allQuestions[currentquestion].question);
+  var options = allQuestions[currentquestion].choices;
+  var formHtml = '';
+  for (var i = 0; i < options.length; i++) {
+    formHtml += '<div><input type="radio" name="option" value="' + i + '" id="option' + i + '"><label for="option' + i + '">' +
+      allQuestions[currentquestion].choices[i] + '</label></div><br/>';
+  }
+  $('#form').html(formHtml);
+  $("#option0").prop('checked', true);
+};
+
+function checkAns() {
+  if ($("input[name=option]:checked").val() == allQuestions[currentquestion].correctAnswer) {
+    correctAnswers++;
+  };
+};
+
+$(document).ready(function() {
+
+  $(".jumbotron").hide();
+  $('#start').click(function() {
+    $(".jumbotron").fadeIn();
+    $(this).hide();
+  });
+
+  $(function() {
+    $("#progressbar").progressbar({
+      max: allQuestions.length - 1,
+      value: 0
+    });
+  });
+
+  setupOptions();
+
+  $("#next").click(function() {
+    event.preventDefault();
+    checkAns();
+    currentquestion++;
+    $(function() {
+      $("#progressbar").progressbar({
+        value: currentquestion
+      });
+    });
+    if (currentquestion < allQuestions.length) {
+      setupOptions();
+      if (currentquestion == allQuestions.length - 1) {
+        $('#next').html("Submit");
+        $('#next').click(function() {
+          $(".jumbotron").hide();
+          $("#result").html("You correctly answered " + correctAnswers + " out of " + currentquestion + " questions! ").hide();
+          $("#result").fadeIn(1500);
+        });
+
+      };
+
+    };
+  });
+});
+
+    </script>
+</body>
+</html>
+ 
+  
